@@ -25,12 +25,12 @@ export default function ContactForm({ facilityName }: { facilityName: string }) 
   if (submitted) {
     return (
       <div className="text-center py-10">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="w-16 h-16 bg-[#F0FAFA] rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-[#5BBDB3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="font-bold text-gray-900 text-lg mb-2">送信完了しました</h3>
+        <h3 className="font-bold text-[#111111] text-lg mb-2">送信完了しました</h3>
         <p className="text-gray-500 text-sm">施設からのご連絡をお待ちください。</p>
       </div>
     );
@@ -48,7 +48,7 @@ export default function ContactForm({ facilityName }: { facilityName: string }) 
             value={form.name}
             onChange={handleChange}
             placeholder="山田 花子"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#5BBDB3]"
           />
         </div>
         <div>
@@ -60,7 +60,7 @@ export default function ContactForm({ facilityName }: { facilityName: string }) 
             value={form.email}
             onChange={handleChange}
             placeholder="example@email.com"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#5BBDB3]"
           />
         </div>
         <div>
@@ -71,7 +71,7 @@ export default function ContactForm({ facilityName }: { facilityName: string }) 
             value={form.phone}
             onChange={handleChange}
             placeholder="090-0000-0000"
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#5BBDB3]"
           />
         </div>
         <div>
@@ -80,7 +80,7 @@ export default function ContactForm({ facilityName }: { facilityName: string }) 
             name="childAge"
             value={form.childAge}
             onChange={handleChange}
-            className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#5BBDB3]"
           >
             <option value="">選択してください</option>
             {['未就学（3〜5歳）', '小学1年生', '小学2年生', '小学3年生', '小学4年生', '小学5年生', '小学6年生',
@@ -97,7 +97,7 @@ export default function ContactForm({ facilityName }: { facilityName: string }) 
           type="date"
           value={form.preferredDate}
           onChange={handleChange}
-          className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+          className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#5BBDB3]"
         />
       </div>
       <div>
@@ -108,12 +108,12 @@ export default function ContactForm({ facilityName }: { facilityName: string }) 
           onChange={handleChange}
           rows={4}
           placeholder="お子さまの状況やご質問などをご記入ください。"
-          className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+          className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-[#5BBDB3] resize-none"
         />
       </div>
       <button
         type="submit"
-        className="w-full bg-orange-500 text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition-colors"
+        className="w-full bg-[#F5C842] text-[#111111] font-bold py-3 rounded-xl hover:bg-[#D4A800] transition-colors"
       >
         送信する
       </button>

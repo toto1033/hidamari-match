@@ -1,6 +1,7 @@
 "use client";
+import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import { SlidersHorizontal, X } from 'lucide-react';
 
 const PREFECTURES = [
   '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
@@ -19,61 +20,66 @@ const SUPPORT_TYPES = ['個別支援', '集団活動', '学習支援', '運動�
 export default function SearchSidebar() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const currentPref = searchParams.get('pref') ?? '';
-  const currentDisabilities = searchParams.getAll('disability');
-  const currentAgeGroups = searchParams.getAll('age');
-  const currentSupports = searchParams.getAll('support');
-  const currentTransport = searchParams.get('transport') === 'true';
-  const currentVacancy = searchParams.get('vacancy') === 'true';
+  const [pref, setPref] = useState(searchParams.get('pref') ?? '');
+  const [disabilities, setDisabilities] = useState<string[]>(searchParams.getAll('disability'));
+  const [ageGroups, setAgeGroups] = useState<string[]>(searchParams.getAll('age'));
+  const [supports, setSupports] = useState<string[]>(searchParams.getAll('support'));
+  const [transport, setTransport] = useState(searchParams.get('transport') === 'true');
+  const [vacancy, setVacancy] = useState(searchParams.get('vacancy') === 'true');
 
-  const update = useCallback((key: string, value: string | null, multi = false) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (!multi) {
-      if (value === null || value === '') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    } else {
-      const existing = params.getAll(key);
-      if (value === null) return;
-      if (existing.includes(value)) {
-        params.delete(key);
-        existing.filter((v) => v !== value).forEach((v) => params.append(key, v));
-      } else {
-        params.append(key, value);
-      }
-    }
-    router.push(`/search?${params.toString()}`);
-  }, [router, searchParams]);
+  useEffect(() => {
+    setPref(searchParams.get('pref') ?? '');
+    setDisabilities(searchParams.getAll('disability'));
+    setAgeGroups(searchParams.getAll('age'));
+    setSupports(searchParams.getAll('support'));
+    setTransport(searchParams.get('transport') === 'true');
+    setVacancy(searchParams.get('vacancy') === 'true');
+  }, [searchParams]);
 
-  const toggleBool = useCallback((key: string, current: boolean) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (current) {
-      params.delete(key);
-    } else {
-      params.set(key, 'true');
-    }
-    router.push(`/search?${params.toString()}`);
-  }, [router, searchParams]);
+  const toggleItem = (list: string[], setList: (v: string[]) => void, item: string) => {
+    setList(list.includes(item) ? list.filter((v) => v !== item) : [...list, item]);
+  };
 
-  const reset = () => router.push('/search');
+  const applyFilters = () => {
+    const params = new URLSearchParams();
+    if (pref) params.set('pref', pref);
+    disabilities.forEach((d) => params.append('disability', d));
+    ageGroups.forEach((a) => params.append('age', a));
+    supports.forEach((s) => params.append('support', s));
+    if (transport) params.set('transport', 'true');
+    if (vacancy) params.set('vacancy', 'true');
+    const sort = searchParams.get('sort');
+    if (sort) params.set('sort', sort);
+    router.push(`/search${params.toString() ? `?${params}` : ''}`);
+    setDrawerOpen(false);
+  };
 
-  return (
-    <aside className="w-full lg:w-64 shrink-0 space-y-6">
+  const reset = () => {
+    setPref('');
+    setDisabilities([]);
+    setAgeGroups([]);
+    setSupports([]);
+    setTransport(false);
+    setVacancy(false);
+    router.push('/search');
+    setDrawerOpen(false);
+  };
+
+  const filterContent = (
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-bold text-gray-900">絞り込み</h2>
-        <button onClick={reset} className="text-xs text-orange-500 hover:underline">リセット</button>
+        <h2 className="font-bold text-[#111111]">絞り込み</h2>
+        <button onClick={reset} className="text-xs text-[#5BBDB3] hover:underline">条件をリセット</button>
       </div>
 
-      {/* エリア */}
       <div>
         <p className="text-sm font-semibold text-gray-700 mb-2">エリア</p>
         <select
-          value={currentPref}
-          onChange={(e) => update('pref', e.target.value || null)}
-          className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          value={pref}
+          onChange={(e) => setPref(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#5BBDB3]"
         >
           <option value="">すべての都道府県</option>
           {PREFECTURES.map((p) => (
@@ -82,7 +88,6 @@ export default function SearchSidebar() {
         </select>
       </div>
 
-      {/* 障害特性 */}
       <div>
         <p className="text-sm font-semibold text-gray-700 mb-2">障害特性</p>
         <div className="space-y-2">
@@ -90,9 +95,9 @@ export default function SearchSidebar() {
             <label key={d} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
               <input
                 type="checkbox"
-                checked={currentDisabilities.includes(d)}
-                onChange={() => update('disability', d, true)}
-                className="accent-orange-500 w-4 h-4"
+                checked={disabilities.includes(d)}
+                onChange={() => toggleItem(disabilities, setDisabilities, d)}
+                className="accent-[#5BBDB3] w-4 h-4"
               />
               {d}
             </label>
@@ -100,7 +105,6 @@ export default function SearchSidebar() {
         </div>
       </div>
 
-      {/* 対象年齢 */}
       <div>
         <p className="text-sm font-semibold text-gray-700 mb-2">対象年齢</p>
         <div className="space-y-2">
@@ -108,9 +112,9 @@ export default function SearchSidebar() {
             <label key={a} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
               <input
                 type="checkbox"
-                checked={currentAgeGroups.includes(a)}
-                onChange={() => update('age', a, true)}
-                className="accent-orange-500 w-4 h-4"
+                checked={ageGroups.includes(a)}
+                onChange={() => toggleItem(ageGroups, setAgeGroups, a)}
+                className="accent-[#5BBDB3] w-4 h-4"
               />
               {a}
             </label>
@@ -118,7 +122,6 @@ export default function SearchSidebar() {
         </div>
       </div>
 
-      {/* 支援内容 */}
       <div>
         <p className="text-sm font-semibold text-gray-700 mb-2">支援内容</p>
         <div className="space-y-2">
@@ -126,9 +129,9 @@ export default function SearchSidebar() {
             <label key={s} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
               <input
                 type="checkbox"
-                checked={currentSupports.includes(s)}
-                onChange={() => update('support', s, true)}
-                className="accent-orange-500 w-4 h-4"
+                checked={supports.includes(s)}
+                onChange={() => toggleItem(supports, setSupports, s)}
+                className="accent-[#5BBDB3] w-4 h-4"
               />
               {s}
             </label>
@@ -136,33 +139,71 @@ export default function SearchSidebar() {
         </div>
       </div>
 
-      {/* トグル */}
       <div className="space-y-3">
         <label className="flex items-center justify-between cursor-pointer">
           <span className="text-sm font-semibold text-gray-700">送迎あり</span>
           <button
             type="button"
-            onClick={() => toggleBool('transport', currentTransport)}
-            className={`w-11 h-6 rounded-full transition-colors ${currentTransport ? 'bg-orange-500' : 'bg-gray-200'}`}
+            onClick={() => setTransport((v) => !v)}
+            className={`w-11 h-6 rounded-full transition-colors ${transport ? 'bg-[#5BBDB3]' : 'bg-gray-200'}`}
           >
-            <span
-              className={`block w-5 h-5 bg-white rounded-full shadow transition-transform mx-0.5 ${currentTransport ? 'translate-x-5' : 'translate-x-0'}`}
-            />
+            <span className={`block w-5 h-5 bg-white rounded-full shadow transition-transform mx-0.5 ${transport ? 'translate-x-5' : 'translate-x-0'}`} />
           </button>
         </label>
         <label className="flex items-center justify-between cursor-pointer">
           <span className="text-sm font-semibold text-gray-700">空きあり</span>
           <button
             type="button"
-            onClick={() => toggleBool('vacancy', currentVacancy)}
-            className={`w-11 h-6 rounded-full transition-colors ${currentVacancy ? 'bg-orange-500' : 'bg-gray-200'}`}
+            onClick={() => setVacancy((v) => !v)}
+            className={`w-11 h-6 rounded-full transition-colors ${vacancy ? 'bg-[#5BBDB3]' : 'bg-gray-200'}`}
           >
-            <span
-              className={`block w-5 h-5 bg-white rounded-full shadow transition-transform mx-0.5 ${currentVacancy ? 'translate-x-5' : 'translate-x-0'}`}
-            />
+            <span className={`block w-5 h-5 bg-white rounded-full shadow transition-transform mx-0.5 ${vacancy ? 'translate-x-5' : 'translate-x-0'}`} />
           </button>
         </label>
       </div>
-    </aside>
+
+      <button
+        onClick={applyFilters}
+        className="w-full bg-[#5BBDB3] text-white font-bold py-2.5 rounded-xl hover:bg-[#4AAAA0] transition-colors text-sm"
+      >
+        この条件で検索
+      </button>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Mobile toggle */}
+      <div className="lg:hidden mb-4">
+        <button
+          onClick={() => setDrawerOpen(true)}
+          className="flex items-center gap-2 bg-white border border-[#5BBDB3] px-4 py-2.5 rounded-xl text-sm font-semibold text-[#5BBDB3] shadow-sm"
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          絞り込み ▼
+        </button>
+      </div>
+
+      {/* Mobile drawer */}
+      {drawerOpen && (
+        <div className="lg:hidden fixed inset-0 z-50 flex">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setDrawerOpen(false)} />
+          <div className="relative ml-auto w-80 max-w-full bg-white h-full overflow-y-auto p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-6">
+              <span className="font-bold text-[#111111]">絞り込み</span>
+              <button onClick={() => setDrawerOpen(false)} className="text-gray-400 hover:text-gray-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            {filterContent}
+          </div>
+        </div>
+      )}
+
+      {/* Desktop sidebar */}
+      <aside className="hidden lg:block w-[280px] shrink-0 bg-[#F0FAFA] rounded-2xl p-5 self-start">
+        {filterContent}
+      </aside>
+    </>
   );
 }

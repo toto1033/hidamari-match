@@ -31,7 +31,7 @@ export default function HeroSearch() {
       <select
         value={prefecture}
         onChange={(e) => setPrefecture(e.target.value)}
-        className="flex-none sm:w-44 px-4 py-3 rounded-xl border border-gray-200 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm"
+        className="flex-none sm:w-44 px-4 py-3 rounded-xl border border-gray-200 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-[#5BBDB3] text-sm"
       >
         <option value="">都道府県を選ぶ</option>
         {PREFECTURES.map((p) => (
@@ -43,11 +43,11 @@ export default function HeroSearch() {
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
         placeholder="施設名・地域・支援内容など"
-        className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-orange-400 text-sm"
+        className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-[#5BBDB3] text-sm"
       />
       <button
         type="submit"
-        className="flex items-center justify-center gap-2 bg-orange-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-orange-600 transition-colors text-sm"
+        className="flex items-center justify-center gap-2 bg-[#F5C842] text-[#111111] font-bold px-6 py-3 rounded-xl hover:bg-[#D4A800] transition-colors text-sm"
       >
         <Search className="w-4 h-4" />
         今すぐ探す
