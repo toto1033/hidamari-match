@@ -10,7 +10,11 @@
       "Bash(cmd.exe *)",
       "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" repo create hidamari-match --public --source=. --push)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(xargs grep *)",
+      "Bash(node *)"
     ]
   }
 }

@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import FacilityCard from '@/components/FacilityCard';
 import SearchSidebar from './SearchSidebar';
 import { searchFacilities } from '@/data/facilities';
@@ -56,7 +57,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#F0FAFA]">
+    <div className="min-h-screen" style={{ backgroundColor: '#FAFAF9' }}>
       <Header />
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
@@ -66,8 +67,8 @@ export default async function SearchPage({ searchParams }: PageProps) {
 
           <main className="flex-1 min-w-0">
             <div className="flex items-center justify-between mb-6">
-              <p className="text-[#111111] font-semibold">
-                <span className="text-[#5BBDB3] text-xl font-bold">{sorted.length}</span>
+              <p className="text-[#2A2520] font-semibold">
+                <span className="font-nunito font-bold text-[#5BBDB3] text-xl">{sorted.length}</span>
                 <span className="text-sm ml-1">件の施設が見つかりました</span>
               </p>
               <div className="flex gap-2 text-sm">
@@ -92,7 +93,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
             </div>
 
             {sorted.length === 0 ? (
-              <div className="bg-white rounded-2xl p-12 text-center border border-gray-100">
+              <div className="bg-white rounded-2xl p-12 text-center border border-[#E8E3DF]">
                 <p className="text-gray-400 text-lg mb-2">条件に合う施設が見つかりませんでした</p>
                 <p className="text-sm text-gray-400">絞り込み条件を変えてお試しください。</p>
               </div>
@@ -119,12 +120,7 @@ export default async function SearchPage({ searchParams }: PageProps) {
         </div>
       </div>
 
-      <footer className="bg-[#5BBDB3] text-white/80 text-sm py-8 px-4 mt-16">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-white font-bold mb-1">ひだまりマッチ</p>
-          <p className="text-xs">© 2026 ひだまりマッチ. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
