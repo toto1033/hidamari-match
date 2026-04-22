@@ -66,12 +66,12 @@ export default async function SearchPage({ searchParams }: PageProps) {
           </Suspense>
 
           <main className="flex-1 min-w-0">
-            <div className="flex items-center justify-between mb-6">
-              <p className="text-[#2A2520] font-semibold">
+            <div className="mb-6">
+              <p className="text-[#2A2520] font-semibold mb-3">
                 <span className="font-nunito font-bold text-[#5BBDB3] text-xl">{sorted.length}</span>
                 <span className="text-sm ml-1">件の施設が見つかりました</span>
               </p>
-              <div className="flex gap-2 text-sm">
+              <div className="flex gap-2 text-sm overflow-x-auto pb-1 scrollbar-hide">
                 {[
                   { key: 'recommended', label: 'おすすめ順' },
                   { key: 'rating', label: '評価順' },
@@ -80,10 +80,10 @@ export default async function SearchPage({ searchParams }: PageProps) {
                   <a
                     key={key}
                     href={sortUrl(key)}
-                    className={`px-3 py-1.5 rounded-lg border transition-colors ${
+                    className={`shrink-0 px-3 py-1.5 rounded-lg border transition-colors ${
                       sort === key
                         ? 'bg-[#5BBDB3] text-white border-[#5BBDB3]'
-                        : 'bg-white text-gray-600 border-gray-200 hover:border-[#5BBDB3]'
+                        : 'bg-white text-[#7A6E65] border-[#E8E3DF] hover:border-[#5BBDB3]'
                     }`}
                   >
                     {label}

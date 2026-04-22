@@ -29,12 +29,12 @@ export default function HeroSearch() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col sm:flex-row rounded-[20px] border-2 border-[#5BBDB3] shadow-[0_4px_20px_rgba(91,189,179,0.12)] overflow-hidden bg-white"
+      className="rounded-[16px] border-2 border-[#5BBDB3] shadow-[0_4px_20px_rgba(91,189,179,0.12)] overflow-hidden bg-white flex flex-col sm:flex-row"
     >
       <select
         value={prefecture}
         onChange={(e) => setPrefecture(e.target.value)}
-        className="sm:w-44 px-4 py-3.5 text-[#2A2520] bg-white focus:outline-none text-sm border-b sm:border-b-0 sm:border-r border-[#E8E3DF]"
+        className="w-full sm:w-44 shrink-0 px-4 py-3.5 text-[#2A2520] bg-white focus:outline-none text-sm border-b sm:border-b-0 sm:border-r border-[#E8E3DF]"
       >
         <option value="">都道府県を選ぶ</option>
         {PREFECTURES.map((p) => (
@@ -45,12 +45,12 @@ export default function HeroSearch() {
         type="text"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
-        placeholder="施設名・地域・支援内容など"
-        className="flex-1 px-4 py-3.5 text-[#2A2520] bg-white focus:outline-none text-sm"
+        placeholder="施設名・支援内容など"
+        className="w-full flex-1 px-4 py-3.5 text-[#2A2520] bg-white focus:outline-none text-sm border-b sm:border-b-0 border-[#E8E3DF]"
       />
       <button
         type="submit"
-        className="flex items-center justify-center gap-2 bg-[#5BBDB3] text-white font-[family-name:var(--font-round)] font-bold px-6 py-3.5 hover:bg-[#4AAAA0] transition-colors text-sm shrink-0"
+        className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#5BBDB3] text-white font-[family-name:var(--font-round)] font-bold px-6 py-3.5 hover:bg-[#4AAAA0] transition-colors text-sm shrink-0"
       >
         <Search className="w-4 h-4" />
         今すぐ探す

@@ -56,49 +56,44 @@ export default async function Home() {
       <Header />
 
       {/* ── Hero ── */}
-      <section className="bg-white py-12 md:py-20 px-4">
+      <section className="bg-white py-10 md:py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col lg:flex-row gap-12 items-center">
             {/* Left column */}
-            <div className="flex-1 min-w-0">
-              <p
-                className="font-nunito font-extrabold text-[#5BBDB3] text-xs tracking-[0.22em] mb-4 uppercase"
-              >
+            <div className="flex-1 min-w-0 w-full">
+              <p className="font-nunito font-extrabold text-[#5BBDB3] text-[10px] tracking-[0.2em] mb-3 uppercase">
                 Afterschool Day Service
               </p>
-              <h1
-                className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-2xl md:text-[44px] leading-tight mb-5"
-              >
+              <h1 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-[22px] md:text-[44px] leading-snug mb-4">
                 お子さまに<br />
                 <span className="relative inline-block">
                   <span className="text-[#5BBDB3]">ぴったりの施設が</span>
                   <span
-                    className="absolute bottom-0 left-0 right-0 h-1 bg-[#F5C842] opacity-70 rounded-full"
+                    className="absolute left-0 right-0 h-1 bg-[#F5C842] opacity-70 rounded-full"
                     style={{ bottom: '-4px' }}
                   />
                 </span>
                 <br />
                 きっと見つかる
               </h1>
-              <p className="text-[#7A6E65] text-[15px] leading-[1.8] mb-8">
-                全国22,000以上の施設から、障害特性・地域・特徴で<br className="hidden md:block" />
-                絞り込んで最適な放課後等デイサービスを探せます。
+              <p className="text-[#7A6E65] text-sm md:text-[15px] leading-relaxed mb-6">
+                全国22,000以上の施設から、障害特性・地域・特徴で絞り込んで最適な放課後等デイサービスを探せます。
               </p>
 
-              <div className="mb-6">
+              <div className="mb-5">
                 <HeroSearch />
               </div>
 
-              {/* Tags */}
-              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              {/* Tags – 横スクロール */}
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
                 {FEATURE_TAGS.map((tag) => (
                   <Link
                     key={tag.label}
                     href={`/search?${tag.param}`}
-                    className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                    className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                       tag.highlight
-                        ? 'bg-[#FFFBEA] border border-[#F5C842] text-[#9A7800] hover:bg-[#F5C842]/20'
-                        : 'bg-white border border-[#5BBDB3] text-[#5BBDB3] hover:bg-[#5BBDB3]/10'
+                        ? 'bg-[#FFFBEA] border border-[#F5C842] text-[#9A7800]'
+                        : 'bg-white border border-[#5BBDB3] text-[#5BBDB3]'
                     }`}
                   >
                     {tag.label}
@@ -183,13 +178,13 @@ export default async function Home() {
       {/* ── Stats bar ── */}
       <section className="bg-[#5BBDB3] py-8 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-around gap-6">
+          <div className="flex items-center justify-around gap-2">
             {STATS.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <p className="font-nunito font-black text-white text-[22px] md:text-[32px] leading-none mb-1">
+              <div key={stat.label} className="text-center min-w-0">
+                <p className="font-nunito font-black text-white text-[20px] md:text-[32px] leading-none mb-1">
                   {stat.num}
                 </p>
-                <p className="text-white/75 text-xs">
+                <p className="text-white/75 text-[10px] md:text-xs leading-tight">
                   {stat.label}
                 </p>
               </div>
@@ -201,16 +196,16 @@ export default async function Home() {
       {/* ── Featured facilities ── */}
       <section className="py-16 px-4" style={{ backgroundColor: '#FAFAF9' }}>
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-end justify-between mb-8">
+          <div className="flex items-end justify-between mb-6">
             <div>
-              <p className="font-nunito font-extrabold text-[#5BBDB3] text-xs tracking-[0.2em] uppercase mb-1">
+              <p className="font-nunito font-extrabold text-[#5BBDB3] text-[10px] tracking-[0.2em] uppercase mb-1">
                 Featured
               </p>
-              <h2 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-[26px]">
+              <h2 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-xl md:text-[26px]">
                 注目の施設
               </h2>
             </div>
-            <Link href="/search" className="text-sm text-[#5BBDB3] hover:underline font-medium">
+            <Link href="/search" className="text-sm text-[#5BBDB3] hover:underline font-medium shrink-0 ml-4">
               すべて見る →
             </Link>
           </div>
@@ -295,12 +290,12 @@ export default async function Home() {
           </div>
 
           {/* Mobile: horizontal scroll */}
-          <div className="md:hidden flex gap-4 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
+          <div className="md:hidden flex gap-3 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
             {featured.map((f) => (
               <Link
                 key={f.id}
                 href={`/facilities/${f.id}`}
-                className="shrink-0 w-[210px] bg-white rounded-2xl border border-[#E8E3DF] overflow-hidden"
+                className="shrink-0 w-[200px] bg-white rounded-2xl border border-[#E8E3DF] overflow-hidden"
               >
                 <div
                   className="h-32 flex items-center justify-center"
@@ -320,6 +315,8 @@ export default async function Home() {
                 </div>
               </Link>
             ))}
+            {/* 右端の余白 */}
+            <div className="w-4 shrink-0" aria-hidden="true" />
           </div>
         </div>
       </section>

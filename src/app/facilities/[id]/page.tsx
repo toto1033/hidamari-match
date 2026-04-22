@@ -69,18 +69,18 @@ export default async function FacilityPage({ params }: PageProps) {
                 </span>
               </div>
             </div>
-            <div className="flex flex-col sm:items-end gap-2 shrink-0">
+            <div className="flex flex-row sm:flex-col gap-2 shrink-0 w-full sm:w-auto sm:items-end">
               <a
                 href="#contact"
-                className="block bg-[#F5C842] text-[#2A2520] font-[family-name:var(--font-round)] font-bold px-6 py-3 rounded-[28px] hover:bg-[#D4A800] transition-colors text-sm text-center min-w-[160px]"
+                className="flex-1 sm:flex-none block bg-[#F5C842] text-[#2A2520] font-[family-name:var(--font-round)] font-bold px-4 sm:px-6 py-3 rounded-[28px] hover:bg-[#D4A800] transition-colors text-sm text-center sm:min-w-[160px]"
               >
                 見学を申し込む
               </a>
               <a
                 href={`tel:${facility.phone}`}
-                className="block border-2 border-[#5BBDB3] text-[#5BBDB3] font-bold px-6 py-2.5 rounded-[28px] hover:bg-[#5BBDB3] hover:text-white transition-colors text-sm text-center min-w-[160px]"
+                className="flex-1 sm:flex-none block border-2 border-[#5BBDB3] text-[#5BBDB3] font-bold px-4 sm:px-6 py-2.5 rounded-[28px] hover:bg-[#5BBDB3] hover:text-white transition-colors text-sm text-center sm:min-w-[160px]"
               >
-                電話で問い合わせる
+                電話する
               </a>
             </div>
           </div>
