@@ -11,10 +11,14 @@ const SEARCH_DROPDOWN = [
   { href: '/coming-soon', label: '地図から探す' },
 ];
 
-const DRAWER_LINKS = [
-  { href: '/search', label: '施設を探す' },
+const SEARCH_ACCORDION_ITEMS = [
+  { href: '/search', label: '条件から探す' },
+  { href: '/search', label: 'フリーワードで探す' },
   { href: '/coming-soon', label: '現在地周辺から探す' },
   { href: '/coming-soon', label: '地図から探す' },
+];
+
+const DRAWER_OTHER_LINKS = [
   { href: '/guide', label: '初めての方へ' },
   { href: '/#how-it-works', label: '使い方' },
   { href: '/faq', label: 'よくある質問' },
@@ -25,6 +29,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [accordionOpen, setAccordionOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -130,10 +135,10 @@ export default function Header() {
           {/* CTA + Hamburger */}
           <div className="flex items-center gap-3">
             <Link
-              href="/search"
+              href="/contact"
               className="hidden md:block bg-[#F5C842] text-[#2A2520] font-[family-name:var(--font-zen-maru)] font-bold text-sm px-5 py-2 rounded-[28px] hover:bg-[#D4A800] transition-colors"
             >
-              無料で探す
+              お問い合わせ
             </Link>
             <button
               className="md:hidden text-[#2A2520] p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
@@ -176,7 +181,39 @@ export default function Header() {
 
         {/* ナビリンク */}
         <nav className="flex flex-col flex-1 overflow-y-auto px-5 py-4 gap-1">
-          {DRAWER_LINKS.map(({ href, label }) => (
+          {/* 施設を探す アコーディオン */}
+          <div className="border-b border-[#E8E3DF]">
+            <button
+              className="w-full flex items-center justify-between text-[#2A2520] text-base font-medium py-3.5 hover:text-[#5BBDB3] transition-colors"
+              onClick={() => setAccordionOpen((v) => !v)}
+              aria-expanded={accordionOpen}
+            >
+              施設を探す
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-200 ${accordionOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+            <div
+              className={`overflow-hidden transition-all duration-200 ${
+                accordionOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
+              }`}
+            >
+              <div className="flex flex-col pb-2 gap-0">
+                {SEARCH_ACCORDION_ITEMS.map(({ href, label }) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    onClick={() => setOpen(false)}
+                    className="text-[#5BBDB3] text-sm py-2.5 pl-4 hover:text-[#4AA8A0] transition-colors"
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {DRAWER_OTHER_LINKS.map(({ href, label }) => (
             <Link
               key={label}
               href={href}
@@ -191,11 +228,11 @@ export default function Header() {
         {/* 区切り線 + CTA */}
         <div className="px-5 pb-8 pt-4 border-t border-[#E8E3DF]">
           <Link
-            href="/search"
+            href="/contact"
             onClick={() => setOpen(false)}
             className="block text-center bg-[#F5C842] text-[#2A2520] font-[family-name:var(--font-zen-maru)] font-bold text-sm px-5 py-3.5 rounded-[28px] hover:bg-[#D4A800] transition-colors"
           >
-            無料で探す
+            お問い合わせ
           </Link>
         </div>
       </div>
