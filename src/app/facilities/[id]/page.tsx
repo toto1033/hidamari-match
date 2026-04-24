@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { MapPin, Phone, Clock, Users, Car, Star, Calendar } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -9,6 +10,24 @@ import Link from 'next/link';
 type PageProps = {
   params: Promise<{ id: string }>;
 };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const facility = await getFacilityById(id);
+
+  if (!facility) {
+    return { title: '施設が見つかりません' };
+  }
+
+  return {
+    title: facility.name,
+    description: `${facility.city}にある${facility.name}の詳細情報。${facility.catchcopy}。空き状況・見学申込はひだまりマッチから。`,
+    openGraph: {
+      title: `${facility.name} | ひだまりマッチ`,
+      description: `${facility.city}にある${facility.name}の詳細情報。${facility.catchcopy}`,
+    },
+  };
+}
 
 export default async function FacilityPage({ params }: PageProps) {
   const { id } = await params;

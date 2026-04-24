@@ -96,7 +96,8 @@ export default function Header() {
           {[
             { href: '/search', label: '施設を探す' },
             { href: '/#how-it-works', label: '使い方' },
-            { href: '/#listing', label: '施設掲載' },
+            { href: '/guide', label: '初めての方へ' },
+            { href: '/for-facilities', label: '施設掲載' },
           ].map(({ href, label }) => (
             <Link
               key={label}

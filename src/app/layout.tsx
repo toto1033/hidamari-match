@@ -15,8 +15,12 @@ const notoSans = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "ひだまりマッチ | 放課後等デイサービス検索",
-  description: "全国の放課後等デイサービスを検索・比較。障害特性・地域・特徴から最適な施設を見つけましょう。",
+  metadataBase: new URL('https://hidamari-match.vercel.app'),
+  title: {
+    default: 'ひだまりマッチ | 放課後等デイサービス検索',
+    template: '%s | ひだまりマッチ',
+  },
+  description: '放課後等デイサービスの検索・比較サイト。お子さまにぴったりの施設が見つかります。',
 };
 
 export default function RootLayout({

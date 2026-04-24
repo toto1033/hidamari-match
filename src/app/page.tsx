@@ -1,10 +1,25 @@
 import Link from 'next/link';
 import { Star, MapPin, Clock, Users } from 'lucide-react';
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FacilityCard from '@/components/FacilityCard';
 import HeroSearch from '@/components/HeroSearch';
 import { getFacilities } from '@/data/facilities';
+
+export const metadata: Metadata = {
+  title: 'ひだまりマッチ | 放課後等デイサービス検索・比較',
+  description: '全国22,000以上の放課後等デイサービスを、障害特性・地域・特徴で絞り込み検索。お子さまにぴったりの施設が見つかります。保護者の方は無料でご利用いただけます。',
+  keywords: ['放課後等デイサービス', '放課後デイ', '障害児', '施設検索', '発達障害', '療育'],
+  openGraph: {
+    title: 'ひだまりマッチ | 放課後等デイサービス検索・比較',
+    description: '全国22,000以上の放課後等デイサービスを検索・比較。お子さまにぴったりの施設が見つかります。',
+    url: 'https://hidamari-match.vercel.app',
+    siteName: 'ひだまりマッチ',
+    locale: 'ja_JP',
+    type: 'website',
+  },
+};
 
 const FEATURE_TAGS = [
   { label: '送迎あり', param: 'transport=true', highlight: false },

@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FacilityCard from '@/components/FacilityCard';
@@ -6,6 +7,15 @@ import SearchSidebar from './SearchSidebar';
 import { searchFacilities } from '@/data/facilities';
 import type { Disability, AgeGroup, SupportType } from '@/types/facility';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: '施設を探す',
+  description: '放課後等デイサービスを地域・障害特性・支援内容で絞り込み検索。空き状況も確認できます。',
+  openGraph: {
+    title: '施設を探す | ひだまりマッチ',
+    description: '放課後等デイサービスを地域・障害特性・支援内容で絞り込み検索。',
+  },
+};
 
 type PageProps = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
