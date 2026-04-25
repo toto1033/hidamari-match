@@ -1,10 +1,9 @@
 import Link from 'next/link';
-import { Star, MapPin, Clock, Users } from 'lucide-react';
+import { Star, MapPin } from 'lucide-react';
 import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import FacilityCard from '@/components/FacilityCard';
-import HeroSearch from '@/components/HeroSearch';
+import HeroSection from '@/components/HeroSection';
 import { getFacilities } from '@/data/facilities';
 
 export const metadata: Metadata = {
@@ -20,17 +19,6 @@ export const metadata: Metadata = {
     type: 'website',
   },
 };
-
-const FEATURE_TAGS = [
-  { label: '送迎あり', param: 'transport=true', highlight: false },
-  { label: '個別支援', param: 'support=個別支援', highlight: false },
-  { label: '学習支援', param: 'support=学習支援', highlight: false },
-  { label: '運動療育', param: 'support=運動療育', highlight: false },
-  { label: '音楽療育', param: 'support=音楽療育', highlight: false },
-  { label: 'SST', param: 'support=SST', highlight: false },
-  { label: '空きあり', param: 'vacancy=true', highlight: true },
-  { label: '土日営業', param: 'weekend=true', highlight: true },
-];
 
 const STATS = [
   { num: '22,000+', label: '掲載施設数' },
@@ -62,133 +50,13 @@ const STEPS = [
 export default async function Home() {
   const all = await getFacilities();
   const featured = all.slice(0, 3);
-  const heroFacility = all[0];
-
-  const hasVacancy = heroFacility.vacancyCount > 0;
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#FAFAF9' }}>
       <Header />
 
       {/* ── Hero ── */}
-      <section className="bg-white py-10 md:py-20 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col lg:flex-row gap-12 items-center">
-            {/* Left column */}
-            <div className="flex-1 min-w-0 w-full">
-              <p className="font-nunito font-extrabold text-[#5BBDB3] text-[10px] tracking-[0.2em] mb-3 uppercase">
-                Afterschool Day Service
-              </p>
-              <h1 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-[22px] md:text-[44px] leading-snug mb-4">
-                お子さまに<br />
-                <span className="relative inline-block">
-                  <span className="text-[#5BBDB3]">ぴったりの施設が</span>
-                  <span
-                    className="absolute left-0 right-0 h-1 bg-[#F5C842] opacity-70 rounded-full"
-                    style={{ bottom: '-4px' }}
-                  />
-                </span>
-                <br />
-                きっと見つかる
-              </h1>
-              <p className="text-[#7A6E65] text-sm md:text-[15px] leading-relaxed mb-6">
-                全国22,000以上の施設から、障害特性・地域・特徴で絞り込んで最適な放課後等デイサービスを探せます。
-              </p>
-
-              <div className="mb-5">
-                <HeroSearch />
-              </div>
-
-              {/* Tags – 横スクロール */}
-              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
-                {FEATURE_TAGS.map((tag) => (
-                  <Link
-                    key={tag.label}
-                    href={`/search?${tag.param}`}
-                    className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                      tag.highlight
-                        ? 'bg-[#FFFBEA] border border-[#F5C842] text-[#9A7800]'
-                        : 'bg-white border border-[#5BBDB3] text-[#5BBDB3]'
-                    }`}
-                  >
-                    {tag.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Right column – featured card (PC) */}
-            <div className="hidden lg:block w-[420px] shrink-0">
-              <Link
-                href={`/facilities/${heroFacility.id}`}
-                className="block bg-white rounded-[24px] overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-transform duration-200"
-              >
-                <div
-                  className="h-52 flex items-center justify-center"
-                  style={{ backgroundColor: heroFacility.hasPhoto ? '#EDF8F7' : heroFacility.imageColor }}
-                >
-                  {heroFacility.hasPhoto ? (
-                    <span className="text-[#5BBDB3] text-sm font-medium">施設写真</span>
-                  ) : (
-                    <span className="text-white/80 text-sm font-medium">No Image</span>
-                  )}
-                </div>
-                <div className="p-5">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-[#F5C842] text-[#F5C842]" />
-                      <span className="font-nunito font-bold text-[#2A2520] text-sm">{heroFacility.rating}</span>
-                      <span className="text-xs text-[#A89F98]">（{heroFacility.reviewCount}件）</span>
-                    </div>
-                    <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
-                      hasVacancy ? 'bg-[#F5C842] text-[#2A2520]' : 'bg-[#FFE0E0] text-red-500'
-                    }`}>
-                      {hasVacancy ? `空き${heroFacility.vacancyCount}名` : '満員'}
-                    </span>
-                  </div>
-                  <h3 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-base mb-1">
-                    {heroFacility.name}
-                  </h3>
-                  <p className="text-sm text-[#5BBDB3] font-medium mb-3">{heroFacility.catchcopy}</p>
-                  <div className="flex items-center gap-4 text-xs text-[#A89F98]">
-                    <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{heroFacility.city}</span>
-                    <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{heroFacility.weekdayHours}</span>
-                    <span className="flex items-center gap-1"><Users className="w-3 h-3" />定員{heroFacility.capacity}名</span>
-                  </div>
-                </div>
-              </Link>
-            </div>
-          </div>
-
-          {/* Mobile: "注目の施設" + featured card */}
-          <div className="lg:hidden mt-10">
-            <p className="text-xs font-nunito font-bold text-[#5BBDB3] tracking-[0.2em] uppercase mb-3">
-              Featured
-            </p>
-            <Link
-              href={`/facilities/${heroFacility.id}`}
-              className="block bg-white rounded-2xl overflow-hidden border border-[#E8E3DF] shadow-sm"
-            >
-              <div
-                className="h-44 flex items-center justify-center"
-                style={{ backgroundColor: heroFacility.hasPhoto ? '#EDF8F7' : heroFacility.imageColor }}
-              >
-                {heroFacility.hasPhoto ? (
-                  <span className="text-[#5BBDB3] text-sm font-medium">施設写真</span>
-                ) : (
-                  <span className="text-white/80 text-sm font-medium">No Image</span>
-                )}
-              </div>
-              <div className="p-4">
-                <h3 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] mb-1">
-                  {heroFacility.name}
-                </h3>
-                <p className="text-sm text-[#5BBDB3] font-medium">{heroFacility.catchcopy}</p>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <HeroSection />
 
       {/* ── Stats bar ── */}
       <section className="bg-[#5BBDB3] py-8 px-4">
