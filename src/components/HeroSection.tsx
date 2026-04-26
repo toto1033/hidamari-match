@@ -98,24 +98,22 @@ export default function HeroSection() {
 
         {/* 検索ボックス */}
         <div
+          className="flex flex-col lg:flex-row w-full lg:max-w-[600px]"
           style={{
             border: '2px solid #5BBDB3',
             borderRadius: '16px',
             overflow: 'hidden',
             boxShadow: '0 4px 24px rgba(91,189,179,0.13)',
-            width: '100%',
-            maxWidth: '600px',
-            display: 'flex',
           }}
         >
           <select
             value={pref}
             onChange={(e) => setPref(e.target.value)}
+            className="border-0 border-b border-[#E8E3DF] lg:border-b-0 w-full lg:w-auto"
             style={{
               minWidth: '110px',
               padding: '13px 10px 13px 18px',
               background: '#fff',
-              border: 'none',
               outline: 'none',
               fontSize: '13px',
               color: '#2A2520',
@@ -128,6 +126,7 @@ export default function HeroSection() {
             ))}
           </select>
           <div
+            className="hidden lg:block"
             style={{
               width: '1px',
               height: '24px',
@@ -142,11 +141,10 @@ export default function HeroSection() {
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="施設名・特徴・支援内容など"
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="border-0 border-b border-[#E8E3DF] lg:border-b-0 w-full lg:grow"
             style={{
-              flex: 1,
               padding: '13px 12px',
               background: '#fff',
-              border: 'none',
               outline: 'none',
               fontSize: '13px',
               color: '#2A2520',
@@ -155,6 +153,7 @@ export default function HeroSection() {
           />
           <button
             onClick={handleSearch}
+            className="w-full lg:w-auto"
             style={{
               background: '#5BBDB3',
               color: '#fff',

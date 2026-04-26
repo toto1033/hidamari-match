@@ -15,7 +15,9 @@
       "Bash(git push *)",
       "Bash(xargs grep *)",
       "Bash(node *)",
-      "PowerShell(taskkill *)"
+      "PowerShell(taskkill *)",
+      "Bash(taskkill /PID 16104 /F)",
+      "PowerShell(Stop-Process *)"
     ]
   }
 }
