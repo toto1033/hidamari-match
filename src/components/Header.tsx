@@ -21,6 +21,7 @@ const SEARCH_ACCORDION_ITEMS = [
 const DRAWER_OTHER_LINKS = [
   { href: '/guide', label: '初めての方へ' },
   { href: '/#how-it-works', label: '使い方' },
+  { href: '/column', label: 'コラム' },
   { href: '/faq', label: 'よくある質問' },
   { href: '/for-facilities', label: '施設掲載' },
 ];
@@ -129,6 +130,7 @@ export default function Header() {
             </div>
 
             <Link href="/#how-it-works" className="hover:text-[#5BBDB3] transition-colors">使い方</Link>
+            <Link href="/column" className="hover:text-[#5BBDB3] transition-colors">コラム</Link>
             <Link href="/for-facilities" className="hover:text-[#5BBDB3] transition-colors">施設掲載</Link>
           </nav>
 
