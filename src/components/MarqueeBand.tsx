@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { HeroPhoto } from '@/data/heroPhotos';
@@ -91,17 +91,122 @@ type Props = {
 
 export default function MarqueeBand({ photos, direction, speed = 28 }: Props) {
   const doubled = [...photos, ...photos];
+  const trackRef = useRef<HTMLDivElement>(null);
+  const isPaused = useRef(false);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollStart = useRef(0);
+  const rafRef = useRef<number>(0);
+
+  // Auto-scroll loop via requestAnimationFrame
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const halfWidth = track.scrollWidth / 2;
+    // speed = seconds to scroll through one full set of photos
+    const pxPerSec = halfWidth / speed;
+
+    if (direction === 'right') {
+      track.scrollLeft = halfWidth;
+    }
+
+    let lastTime = 0;
+    const animate = (now: number) => {
+      if (lastTime && !isPaused.current && !isDragging.current) {
+        const dt = now - lastTime;
+        const delta = (pxPerSec * dt) / 1000;
+
+        if (direction === 'left') {
+          track.scrollLeft += delta;
+          if (track.scrollLeft >= halfWidth) {
+            track.scrollLeft -= halfWidth;
+          }
+        } else {
+          track.scrollLeft -= delta;
+          if (track.scrollLeft <= 0) {
+            track.scrollLeft += halfWidth;
+          }
+        }
+      }
+      lastTime = now;
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [direction, speed]);
+
+  // Window-level listeners to handle drag released outside the component
+  useEffect(() => {
+    const handleWindowMouseMove = (e: MouseEvent) => {
+      if (!isDragging.current || !trackRef.current) return;
+      trackRef.current.scrollLeft = scrollStart.current - (e.pageX - startX.current);
+    };
+    const handleWindowMouseUp = () => {
+      if (!isDragging.current) return;
+      isDragging.current = false;
+      isPaused.current = false;
+      if (trackRef.current) trackRef.current.style.cursor = 'grab';
+    };
+    window.addEventListener('mousemove', handleWindowMouseMove);
+    window.addEventListener('mouseup', handleWindowMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleWindowMouseMove);
+      window.removeEventListener('mouseup', handleWindowMouseUp);
+    };
+  }, []);
+
+  const onMouseEnter = () => { isPaused.current = true; };
+  const onMouseLeave = () => { if (!isDragging.current) isPaused.current = false; };
+
+  const onMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    isDragging.current = true;
+    isPaused.current = true;
+    startX.current = e.pageX;
+    scrollStart.current = trackRef.current?.scrollLeft ?? 0;
+    if (trackRef.current) trackRef.current.style.cursor = 'grabbing';
+    e.preventDefault();
+  };
+
+  const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    isDragging.current = true;
+    isPaused.current = true;
+    startX.current = e.touches[0].pageX;
+    scrollStart.current = trackRef.current?.scrollLeft ?? 0;
+  };
+
+  const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isDragging.current || !trackRef.current) return;
+    trackRef.current.scrollLeft = scrollStart.current - (e.touches[0].pageX - startX.current);
+  };
+
+  const onTouchEnd = () => {
+    isDragging.current = false;
+    isPaused.current = false;
+  };
 
   return (
     <div style={{ overflow: 'hidden', height: '130px', width: '100%' }}>
       <div
+        ref={trackRef}
+        className="marquee-track"
         style={{
           display: 'flex',
           gap: '8px',
-          width: 'max-content',
+          overflowX: 'scroll',
           padding: '5px 0',
-          animation: `marquee-${direction} ${speed}s linear infinite`,
+          cursor: 'grab',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          height: '100%',
         }}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onMouseDown={onMouseDown}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       >
         {doubled.map((photo, i) => (
           <PhotoCard key={i} photo={photo} index={i % photos.length} />

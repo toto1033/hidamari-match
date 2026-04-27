@@ -35,3 +35,18 @@ body {
   0%   { transform: translateX(-50%); }
   100% { transform: translateX(0); }
 }
+
+.marquee-track {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.marquee-track::-webkit-scrollbar {
+  display: none;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+  cursor: grab;
+}
+.marquee-track:active {
+  cursor: grabbing;
+}
