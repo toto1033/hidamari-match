@@ -43,6 +43,7 @@ export type Facility = {
   hasPhoto: boolean;
   lat: number;
   lng: number;
+  createdAt: string;
 };
 
 export type SearchParams = {

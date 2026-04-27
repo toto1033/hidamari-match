@@ -47,9 +47,15 @@ const STEPS = [
   },
 ];
 
+function isNew(createdAt: string): boolean {
+  return Date.now() - new Date(createdAt).getTime() < 30 * 24 * 60 * 60 * 1000;
+}
+
 export default async function Home() {
   const all = await getFacilities();
-  const featured = all.slice(0, 3);
+  const featured = [...all]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 3);
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#FAFAF9' }}>
@@ -82,10 +88,10 @@ export default async function Home() {
           <div className="flex items-end justify-between mb-6">
             <div>
               <p className="font-nunito font-extrabold text-[#5BBDB3] text-[10px] tracking-[0.2em] uppercase mb-1">
-                Featured
+                New Arrival
               </p>
               <h2 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-xl md:text-[26px]">
-                注目の施設
+                新着の施設
               </h2>
             </div>
             <Link href="/search" className="text-sm text-[#5BBDB3] hover:underline font-medium shrink-0 ml-4">
@@ -93,60 +99,27 @@ export default async function Home() {
             </Link>
           </div>
 
-          {/* PC: featured grid (large + 2 small) */}
+          {/* PC: uniform 3-column grid */}
           <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {/* Large card */}
-            <Link
-              href={`/facilities/${featured[0].id}`}
-              className="block bg-white rounded-2xl border border-[#E8E3DF] overflow-hidden group hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)] transition-all duration-200 lg:row-span-2"
-            >
-              <div
-                className="h-[140px] lg:h-[220px] flex items-center justify-center"
-                style={{ backgroundColor: featured[0].hasPhoto ? '#EDF8F7' : featured[0].imageColor }}
-              >
-                {featured[0].hasPhoto ? (
-                  <span className="text-[#5BBDB3] text-sm font-medium">施設写真</span>
-                ) : (
-                  <span className="text-white/80 text-sm font-medium">No Image</span>
-                )}
-              </div>
-              <div className="p-5">
-                <div className="flex items-center gap-1 mb-2">
-                  <Star className="w-3.5 h-3.5 fill-[#F5C842] text-[#F5C842]" />
-                  <span className="font-nunito font-bold text-sm text-[#2A2520]">{featured[0].rating}</span>
-                  <span className="text-xs text-[#A89F98]">（{featured[0].reviewCount}件）</span>
-                  <span className={`ml-auto text-xs font-bold px-2 py-0.5 rounded-full ${
-                    featured[0].vacancyCount > 0 ? 'bg-[#F5C842] text-[#2A2520]' : 'bg-[#FFE0E0] text-red-500'
-                  }`}>
-                    {featured[0].vacancyCount > 0 ? `空き${featured[0].vacancyCount}名` : '満員'}
-                  </span>
-                </div>
-                <h3 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-base mb-1">
-                  {featured[0].name}
-                </h3>
-                <p className="text-sm text-[#5BBDB3] font-medium mb-3">{featured[0].catchcopy}</p>
-                <div className="flex items-center gap-1 text-xs text-[#A89F98] mb-1">
-                  <MapPin className="w-3 h-3" />{featured[0].city}
-                </div>
-                <div className="flex flex-wrap gap-1 mt-3">
-                  {featured[0].disabilities.slice(0, 2).map((d) => (
-                    <span key={d} className="text-xs border border-[#5BBDB3] text-[#5BBDB3] px-2 py-0.5 rounded-full">{d}</span>
-                  ))}
-                </div>
-              </div>
-            </Link>
-
-            {/* Small cards */}
-            {featured.slice(1).map((f) => (
+            {featured.map((f) => (
               <Link
                 key={f.id}
                 href={`/facilities/${f.id}`}
                 className="block bg-white rounded-2xl border border-[#E8E3DF] overflow-hidden group hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)] transition-all duration-200"
               >
                 <div
-                  className="h-[140px] flex items-center justify-center"
+                  className="relative h-[140px] flex items-center justify-center"
                   style={{ backgroundColor: f.hasPhoto ? '#EDF8F7' : f.imageColor }}
                 >
+                  {isNew(f.createdAt) && (
+                    <span style={{
+                      position: 'absolute', top: '8px', left: '8px',
+                      background: '#F5C842', color: '#2A2520',
+                      fontSize: '10px', fontWeight: 800,
+                      borderRadius: '6px', padding: '2px 7px',
+                      zIndex: 1,
+                    }}>NEW!</span>
+                  )}
                   {f.hasPhoto ? (
                     <span className="text-[#5BBDB3] text-sm font-medium">施設写真</span>
                   ) : (
@@ -157,6 +130,7 @@ export default async function Home() {
                   <div className="flex items-center gap-1 mb-1.5">
                     <Star className="w-3 h-3 fill-[#F5C842] text-[#F5C842]" />
                     <span className="font-nunito font-bold text-xs text-[#2A2520]">{f.rating}</span>
+                    <span className="text-xs text-[#A89F98]">（{f.reviewCount}件）</span>
                     <span className={`ml-auto text-xs font-bold px-2 py-0.5 rounded-full ${
                       f.vacancyCount > 0 ? 'bg-[#F5C842] text-[#2A2520]' : 'bg-[#FFE0E0] text-red-500'
                     }`}>
@@ -166,7 +140,10 @@ export default async function Home() {
                   <h3 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-sm mb-1">
                     {f.name}
                   </h3>
-                  <p className="text-xs text-[#5BBDB3] font-medium">{f.catchcopy}</p>
+                  <p className="text-xs text-[#5BBDB3] font-medium mb-2">{f.catchcopy}</p>
+                  <div className="flex items-center gap-1 text-xs text-[#A89F98]">
+                    <MapPin className="w-3 h-3" />{f.city}
+                  </div>
                 </div>
               </Link>
             ))}
@@ -181,9 +158,18 @@ export default async function Home() {
                 className="shrink-0 w-[200px] bg-white rounded-2xl border border-[#E8E3DF] overflow-hidden"
               >
                 <div
-                  className="h-32 flex items-center justify-center"
+                  className="relative h-32 flex items-center justify-center"
                   style={{ backgroundColor: f.hasPhoto ? '#EDF8F7' : f.imageColor }}
                 >
+                  {isNew(f.createdAt) && (
+                    <span style={{
+                      position: 'absolute', top: '8px', left: '8px',
+                      background: '#F5C842', color: '#2A2520',
+                      fontSize: '10px', fontWeight: 800,
+                      borderRadius: '6px', padding: '2px 7px',
+                      zIndex: 1,
+                    }}>NEW!</span>
+                  )}
                   {f.hasPhoto ? (
                     <span className="text-[#5BBDB3] text-xs font-medium">施設写真</span>
                   ) : (

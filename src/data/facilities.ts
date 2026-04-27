@@ -26,6 +26,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 35.6580,
     lng: 139.7016,
+    createdAt: '2026-04-25',
   },
   {
     id: 'd8b9c0e1-f2a3-4b5c-8d7e-6f9a0b1c2d3e',
@@ -52,6 +53,7 @@ const facilities: Facility[] = [
     hasPhoto: false,
     lat: 35.6938,
     lng: 139.7036,
+    createdAt: '2026-04-22',
   },
   {
     id: 'e7c8d9f0-a1b2-4c3d-9e8f-7a6b5c4d3e2f',
@@ -78,6 +80,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 35.4437,
     lng: 139.6380,
+    createdAt: '2026-04-20',
   },
   {
     id: 'f6d7e8c9-b0a1-4d2e-0f1a-8b7c6d5e4f3a',
@@ -104,6 +107,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 34.7024,
     lng: 135.4959,
+    createdAt: '2026-04-18',
   },
   {
     id: 'a5e6f7d8-c9b0-4e3f-1a2b-9c8d7e6f5a4b',
@@ -130,6 +134,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 35.1694,
     lng: 136.9064,
+    createdAt: '2026-04-16',
   },
   {
     id: 'b4f5a6e7-d8c9-4f0a-2b3c-0d9e8f7a6b5c',
@@ -156,6 +161,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 35.6074,
     lng: 140.1065,
+    createdAt: '2026-04-14',
   },
   {
     id: 'c3a4b5f6-e7d8-4a1b-3c4d-1e0f9a8b7c6d',
@@ -182,6 +188,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 35.5765,
     lng: 139.6558,
+    createdAt: '2026-04-11',
   },
   {
     id: 'd2b3c4a5-f6e7-4b2c-4d5e-2f1a0b9c8d7e',
@@ -208,6 +215,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 35.0836,
     lng: 137.1565,
+    createdAt: '2026-04-09',
   },
   {
     id: 'e1c2d3b4-a5f6-4c3d-5e6f-3a2b1c0d9e8f',
@@ -234,6 +242,7 @@ const facilities: Facility[] = [
     hasPhoto: false,
     lat: 35.6438,
     lng: 139.6682,
+    createdAt: '2026-04-07',
   },
   {
     id: 'f0d1e2c3-b4a5-4d4e-6f7a-4b3c2d1e0f9a',
@@ -260,6 +269,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 34.5728,
     lng: 135.4831,
+    createdAt: '2026-04-05',
   },
   {
     id: 'a9e0f1d2-c3b4-4e5f-7a8b-5c4d3e2f1a0b',
@@ -286,6 +296,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 35.1981,
     lng: 136.9012,
+    createdAt: '2026-04-03',
   },
   {
     id: 'b8f9a0e1-d2c3-4f6a-8b9c-6d5e4f3a2b1c',
@@ -312,6 +323,7 @@ const facilities: Facility[] = [
     hasPhoto: false,
     lat: 34.9558,
     lng: 137.1764,
+    createdAt: '2026-04-01',
   },
   {
     id: 'c7a8b9f0-e1d2-4a7b-9c0d-7e6f5a4b3c2d',
@@ -338,6 +350,7 @@ const facilities: Facility[] = [
     hasPhoto: false,
     lat: 34.7849,
     lng: 135.4693,
+    createdAt: '2026-03-31',
   },
   {
     id: 'd6b7c8a9-f0e1-4b8c-0d1e-8f7a6b5c4d3e',
@@ -364,6 +377,7 @@ const facilities: Facility[] = [
     hasPhoto: false,
     lat: 35.5770,
     lng: 139.3286,
+    createdAt: '2026-03-30',
   },
   {
     id: 'e5c6d7b8-a9f0-4c9d-1e2f-9a8b7c6d5e4f',
@@ -390,6 +404,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 35.7314,
     lng: 139.5980,
+    createdAt: '2026-03-29',
   },
   {
     id: 'f4d5e6c7-b8a9-4d0e-2f3a-0b9c8d7e6f5a',
@@ -416,6 +431,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 34.9345,
     lng: 135.7577,
+    createdAt: '2026-03-28',
   },
   {
     id: 'a3e4f5d6-c7b8-4e1f-3a4b-1c0d9e8f7a6b',
@@ -442,6 +458,7 @@ const facilities: Facility[] = [
     hasPhoto: true,
     lat: 35.9063,
     lng: 139.6238,
+    createdAt: '2026-03-27',
   },
   {
     id: 'b2f3a4e5-d6c7-4f2a-4b5c-2d1e0f9a8b7c',
@@ -468,6 +485,7 @@ const facilities: Facility[] = [
     hasPhoto: false,
     lat: 33.5895,
     lng: 130.4205,
+    createdAt: '2026-03-26',
   },
   {
     id: 'c1a2b3f4-e5d6-4a3b-5c6d-3e2f1a0b9c8d',
@@ -494,6 +512,7 @@ const facilities: Facility[] = [
     hasPhoto: false,
     lat: 35.6998,
     lng: 139.8260,
+    createdAt: '2026-03-25',
   },
   {
     id: 'd0b1c2a3-f4e5-4b4c-6d7e-4f3a2b1c0d9e',
@@ -520,6 +539,7 @@ const facilities: Facility[] = [
     hasPhoto: false,
     lat: 35.3042,
     lng: 136.8005,
+    createdAt: '2026-03-28',
   },
 ];
 
