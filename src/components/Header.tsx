@@ -59,9 +59,6 @@ export default function Header() {
       {/* 上部バー */}
       <div className="hidden md:block bg-[#EDF8F7] border-b border-[#C8EDEA]">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-end h-9 gap-6">
-          <Link href="/guide" className="text-[#5BBDB3] text-xs hover:text-[#4AA8A0] transition-colors">
-            初めての方へ
-          </Link>
           <Link href="/faq" className="text-[#5BBDB3] text-xs hover:text-[#4AA8A0] transition-colors">
             よくある質問
           </Link>
@@ -129,6 +126,7 @@ export default function Header() {
               </div>
             </div>
 
+            <Link href="/guide" className="hover:text-[#5BBDB3] transition-colors">初めての方へ</Link>
             <Link href="/#how-it-works" className="hover:text-[#5BBDB3] transition-colors">使い方</Link>
             <Link href="/column" className="hover:text-[#5BBDB3] transition-colors">コラム</Link>
             <Link href="/for-facilities" className="hover:text-[#5BBDB3] transition-colors">施設掲載</Link>
