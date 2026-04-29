@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import { getColumnBySlug, getColumns } from '@/data/columns';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -21,110 +19,213 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const CATEGORY_COLORS: Record<string, string> = {
-  '制度・費用': 'bg-[#EDF8F7] text-[#3d8880] border-[#C8EDEA]',
-  '施設の選び方': 'bg-[#FFFBEA] text-[#9A7800] border-[#F0DC8A]',
-  '地域情報': 'bg-[#F3F0FF] text-[#6B50C8] border-[#D4CAFE]',
-};
-
 export default async function ColumnDetailPage({ params }: Props) {
   const { slug } = await params;
   const col = getColumnBySlug(slug);
   if (!col) notFound();
 
+  const allColumns = getColumns();
+  const relatedColumns = [
+    ...allColumns.filter((c) => c.category === col.category && c.slug !== slug),
+    ...allColumns.filter((c) => c.category !== col.category && c.slug !== slug),
+  ].slice(0, 3);
+
   const paragraphs = col.content.split('\n\n').filter(Boolean);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FAFAF9' }}>
-      <Header />
-
-      <article className="py-10 px-4">
-        <div className="max-w-2xl mx-auto">
-          {/* パンくず */}
-          <nav className="flex items-center gap-2 text-xs text-[#A89F98] mb-6">
-            <Link href="/" className="hover:text-[#5BBDB3] transition-colors">トップ</Link>
-            <span>/</span>
-            <Link href="/column" className="hover:text-[#5BBDB3] transition-colors">コラム</Link>
-            <span>/</span>
-            <span className="text-[#7A6E65] line-clamp-1">{col.title}</span>
-          </nav>
-
-          {/* ヘッダー */}
-          <header className="mb-8">
-            <span className={`inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full border mb-3 ${
-              CATEGORY_COLORS[col.category] ?? 'bg-[#F3F0EE] text-[#7A6E65] border-[#E8E3DF]'
-            }`}>
-              {col.category}
-            </span>
-            <h1 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-xl md:text-2xl leading-snug mb-3">
-              {col.title}
-            </h1>
-            <p className="font-nunito text-xs text-[#A89F98]">{col.publishedAt}</p>
-          </header>
-
-          {/* リード文 */}
-          <div className="bg-[#EDF8F7] border-l-4 border-[#5BBDB3] rounded-r-xl px-5 py-4 mb-8">
-            <p className="text-sm text-[#2A2520] leading-relaxed">{col.description}</p>
-          </div>
-
-          {/* 本文 */}
-          <div className="space-y-5">
-            {paragraphs.map((para, i) => {
-              if (para.startsWith('■')) {
-                return (
-                  <h2
-                    key={i}
-                    className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-base border-b-2 border-[#5BBDB3] pb-1 mt-8"
-                  >
-                    {para}
-                  </h2>
-                );
-              }
-              if (para.startsWith('【') || para.startsWith('・') || para.startsWith('1.') || para.startsWith('2.') || para.startsWith('3.') || para.startsWith('4.')) {
-                return (
-                  <div key={i} className="pl-1 space-y-1">
-                    {para.split('\n').map((line, j) => (
-                      <p key={j} className="text-sm text-[#2A2520] leading-relaxed">{line}</p>
-                    ))}
-                  </div>
-                );
-              }
-              return (
-                <div key={i}>
-                  {para.split('\n').map((line, j) => (
-                    <p key={j} className="text-sm text-[#2A2520] leading-relaxed">{line}</p>
-                  ))}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* 施設検索CTA */}
-          <div className="mt-12 bg-white border border-[#E8E3DF] rounded-2xl p-6 text-center">
-            <p className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] mb-2">
-              お近くの施設を探してみましょう
-            </p>
-            <p className="text-xs text-[#7A6E65] mb-4">
-              ひだまりマッチでは条件を指定して施設を絞り込み検索できます。
-            </p>
-            <Link
-              href="/search"
-              className="inline-block bg-[#5BBDB3] text-white font-[family-name:var(--font-round)] font-bold text-sm px-6 py-3 rounded-[28px] hover:bg-[#4AA8A0] transition-colors"
-            >
-              施設を探す
-            </Link>
-          </div>
-
-          {/* 戻るリンク */}
-          <div className="mt-8 text-center">
-            <Link href="/column" className="text-sm text-[#5BBDB3] hover:underline">
-              ← コラム一覧に戻る
-            </Link>
-          </div>
+    <article className="max-w-[680px] mx-auto px-4 sm:px-8 py-10">
+      {/* 記事ヘッダー */}
+      <header className="mb-8">
+        <p
+          className="text-[10px] font-medium text-[#5BBDB3] tracking-[0.08em] mb-3"
+          style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+        >
+          {col.category}
+        </p>
+        <h1 className="font-mincho font-bold text-[#2A2520] text-[22px] sm:text-[28px] leading-[1.5] mb-4">
+          {col.title}
+        </h1>
+        <div
+          className="flex items-center gap-3 mb-6"
+          style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+        >
+          <span className="text-[12px] text-[#B8AFA0]">{col.publishedAt}</span>
+          <span className="text-[12px] text-[#B8AFA0]">{col.readingTime}</span>
         </div>
-      </article>
 
-      <Footer />
-    </div>
+        {/* アイキャッチ画像エリア */}
+        <div
+          className="w-full rounded-xl mb-8"
+          style={{
+            aspectRatio: '16/9',
+            backgroundColor: col.thumbnailColor ?? '#E8E0C8',
+            borderRadius: '12px',
+          }}
+        />
+      </header>
+
+      {/* 本文エリア */}
+      <div
+        className="text-[15px] text-[#3A3530] leading-[2.0] mb-12"
+        style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+      >
+        {paragraphs.map((para, i) => {
+          if (para.startsWith('■')) {
+            return (
+              <h2
+                key={i}
+                className="font-mincho font-bold text-[20px] text-[#2A2520]"
+                style={{
+                  borderLeft: '4px solid #5BBDB3',
+                  paddingLeft: '12px',
+                  margin: '32px 0 16px',
+                }}
+              >
+                {para.replace(/^■\s*/, '')}
+              </h2>
+            );
+          }
+
+          if (para.startsWith('【')) {
+            const lines = para.split('\n');
+            const heading = lines[0];
+            const body = lines.slice(1).join('\n');
+            return (
+              <div key={i}>
+                <h3
+                  className="font-mincho font-semibold text-[17px] text-[#2A2520]"
+                  style={{ margin: '24px 0 12px' }}
+                >
+                  {heading}
+                </h3>
+                {body && (
+                  <p className="text-[15px] text-[#3A3530] leading-[2.0]">
+                    {body}
+                  </p>
+                )}
+              </div>
+            );
+          }
+
+          return (
+            <div key={i} className="mb-4">
+              {para.split('\n').map((line, j) => (
+                <p key={j} className="text-[15px] text-[#3A3530] leading-[2.0]">
+                  {line}
+                </p>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 記事末尾CTA */}
+      <div
+        className="text-center mb-10"
+        style={{
+          backgroundColor: '#EDF8F7',
+          border: '1px solid #C8EDEA',
+          borderRadius: '12px',
+          padding: '24px 28px',
+        }}
+      >
+        <p
+          className="text-[10px] font-medium text-[#5BBDB3] tracking-[0.08em] mb-2"
+          style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+        >
+          HIDAMARI MATCH
+        </p>
+        <p className="font-mincho font-bold text-[16px] text-[#2A2520] mb-1.5">
+          お子さまに合う施設を、無料で探せます
+        </p>
+        <p
+          className="text-[12px] text-[#7A6E65] mb-4"
+          style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+        >
+          地域・障害特性・希望のサービスから放課後等デイサービスを検索できます
+        </p>
+        <Link
+          href="/search"
+          className="inline-block text-[13px] font-medium text-white hover:opacity-80 transition-opacity"
+          style={{
+            backgroundColor: '#5BBDB3',
+            borderRadius: '22px',
+            padding: '10px 28px',
+            fontFamily: "'Noto Sans JP', sans-serif",
+          }}
+        >
+          施設を探してみる →
+        </Link>
+      </div>
+
+      {/* 関連記事 */}
+      {relatedColumns.length > 0 && (
+        <section>
+          <h2
+            className="font-mincho font-semibold text-[14px] text-[#2A2520] pb-2 mb-4"
+            style={{ borderBottom: '1px solid #E8E0C8' }}
+          >
+            あわせて読みたい
+          </h2>
+          <ul>
+            {relatedColumns.map((related) => (
+              <li
+                key={related.slug}
+                style={{ borderBottom: '1px solid #E8E0C8' }}
+              >
+                <Link
+                  href={`/column/${related.slug}`}
+                  className="flex flex-row gap-4 items-start py-5 hover:opacity-75 transition-opacity duration-150"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p
+                      className="text-[10px] font-medium text-[#5BBDB3] tracking-[0.08em] mb-1.5"
+                      style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+                    >
+                      {related.category}
+                    </p>
+                    <h3 className="font-mincho font-semibold text-[17px] text-[#2A2520] leading-[1.55] mb-2">
+                      {related.title}
+                    </h3>
+                    <div className="flex items-center gap-2.5">
+                      <span
+                        className="text-[11px] text-[#B8AFA0]"
+                        style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+                      >
+                        {related.publishedAt}
+                      </span>
+                      <span
+                        className="text-[11px] text-[#B8AFA0]"
+                        style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+                      >
+                        {related.readingTime}
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    className="shrink-0 rounded-lg w-[80px] h-[54px] lg:w-[120px] lg:h-[80px]"
+                    style={{
+                      backgroundColor: related.thumbnailColor ?? '#E8E0C8',
+                      borderRadius: '8px',
+                    }}
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* 一覧に戻る */}
+      <div className="mt-8 text-center">
+        <Link
+          href="/column"
+          className="text-[13px] text-[#5BBDB3] hover:underline"
+          style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+        >
+          ← お役立ち記事一覧に戻る
+        </Link>
+      </div>
+    </article>
   );
 }

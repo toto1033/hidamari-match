@@ -5,7 +5,7 @@ const FOOTER_SECTIONS = [
     heading: '保護者向け',
     links: [
       { href: '/search', label: '施設を探す' },
-      { href: '/column', label: 'コラム・お役立ち情報' },
+      { href: '/column', label: 'お役立ち記事' },
       { href: '/guide', label: '初めての方へ' },
       { href: '/faq', label: 'よくある質問' },
       { href: '/contact', label: 'お問い合わせ' },

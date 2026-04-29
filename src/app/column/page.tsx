@@ -1,83 +1,144 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import { getColumns } from '@/data/columns';
 
 export const metadata: Metadata = {
-  title: 'コラム・お役立ち情報 | ひだまりマッチ',
+  title: 'お役立ち記事 | ひだまりマッチ',
   description: '放課後等デイサービスの制度・費用・選び方など、保護者の方に役立つ情報をお届けします。',
 };
 
-const CATEGORY_COLORS: Record<string, string> = {
-  '制度・費用': 'bg-[#EDF8F7] text-[#3d8880] border-[#C8EDEA]',
-  '施設の選び方': 'bg-[#FFFBEA] text-[#9A7800] border-[#F0DC8A]',
-  '地域情報': 'bg-[#F3F0FF] text-[#6B50C8] border-[#D4CAFE]',
+const CATEGORIES = ['すべて', '制度・費用', '施設の選び方', '地域情報', '療育・支援'] as const;
+
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default function ColumnListPage() {
-  const columns = getColumns();
+export default async function ColumnListPage({ searchParams }: Props) {
+  const { category: rawCategory } = await searchParams;
+  const activeCategory =
+    typeof rawCategory === 'string' && CATEGORIES.includes(rawCategory as (typeof CATEGORIES)[number])
+      ? rawCategory
+      : 'すべて';
+
+  const allColumns = getColumns();
+  const columns =
+    activeCategory === 'すべて'
+      ? allColumns
+      : allColumns.filter((c) => c.category === activeCategory);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FAFAF9' }}>
-      <Header />
+    <div className="max-w-[780px] mx-auto px-4 sm:px-8 py-10">
+      {/* カテゴリナビ */}
+      <nav
+        className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-3 mb-8 flex items-center gap-2 overflow-x-auto scrollbar-hide"
+        style={{ borderBottom: '1px solid #E8E0C8', borderTop: '1px solid #E8E0C8' }}
+      >
+        {CATEGORIES.map((cat) => {
+          const isActive = cat === activeCategory;
+          const href = cat === 'すべて' ? '/column' : `/column?category=${encodeURIComponent(cat)}`;
+          return (
+            <Link
+              key={cat}
+              href={href}
+              className="shrink-0 px-3.5 py-1.5 text-[12px] whitespace-nowrap rounded-full transition-all duration-150"
+              style={{
+                fontFamily: "'Noto Sans JP', sans-serif",
+                ...(isActive
+                  ? {
+                      backgroundColor: '#5BBDB3',
+                      color: '#ffffff',
+                      fontWeight: 600,
+                    }
+                  : {
+                      backgroundColor: '#F5F0E8',
+                      color: '#7A6E65',
+                    }),
+              }}
+            >
+              {cat}
+            </Link>
+          );
+        })}
+      </nav>
 
-      {/* ページヘッダー */}
-      <section className="bg-white border-b border-[#E8E3DF] py-10 px-4">
-        <div className="max-w-6xl mx-auto">
-          <p className="font-nunito font-extrabold text-[#5BBDB3] text-[10px] tracking-[0.2em] uppercase mb-1">
-            Column
-          </p>
-          <h1 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-2xl md:text-[28px]">
-            コラム・お役立ち情報
-          </h1>
-          <p className="text-sm text-[#7A6E65] mt-2">
-            放課後等デイサービスの制度・選び方・地域情報など、保護者の方に役立つ情報をお届けします。
-          </p>
-        </div>
-      </section>
+      {/* ページタイトル */}
+      <h1 className="font-mincho font-bold text-[#2A2520] text-[22px] mb-2">
+        お役立ち記事
+      </h1>
+      <p
+        className="text-[13px] text-[#9A8F7A] mb-8"
+        style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+      >
+        放課後等デイサービスに関する制度・費用・施設の選び方を解説します
+      </p>
 
       {/* 記事一覧 */}
-      <section className="py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {columns.map((col) => (
+      {columns.length === 0 ? (
+        <p className="text-[13px] text-[#9A8F7A]">該当する記事はありません。</p>
+      ) : (
+        <ul>
+          {columns.map((col) => (
+            <li
+              key={col.slug}
+              style={{ borderBottom: '1px solid #E8E0C8' }}
+            >
               <Link
-                key={col.slug}
                 href={`/column/${col.slug}`}
-                className="block bg-white rounded-2xl border border-[#E8E3DF] overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)] transition-all duration-200"
+                className="flex flex-row gap-5 items-start py-6 hover:opacity-75 transition-opacity duration-150"
               >
-                {/* サムネイル代わりのカラーバー */}
-                <div className="h-3 bg-[#5BBDB3]" />
-
-                <div className="p-5">
-                  {/* カテゴリバッジ */}
-                  <span className={`inline-block text-[10px] font-bold px-2.5 py-0.5 rounded-full border mb-3 ${
-                    CATEGORY_COLORS[col.category] ?? 'bg-[#F3F0EE] text-[#7A6E65] border-[#E8E3DF]'
-                  }`}>
+                {/* テキストエリア（左） */}
+                <div className="flex-1 min-w-0">
+                  <p
+                    className="text-[10px] font-medium text-[#5BBDB3] mb-1.5 tracking-[0.08em]"
+                    style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+                  >
                     {col.category}
-                  </span>
-
-                  <h2 className="font-[family-name:var(--font-round)] font-bold text-[#2A2520] text-sm leading-snug mb-2 line-clamp-3">
+                  </p>
+                  <h2 className="font-mincho font-semibold text-[17px] text-[#2A2520] leading-[1.55] mb-2">
                     {col.title}
                   </h2>
-
-                  <p className="text-xs text-[#7A6E65] leading-relaxed line-clamp-3 mb-4">
+                  <p
+                    className="text-[12px] text-[#7A6E65] leading-[1.75] mb-2.5"
+                    style={{
+                      fontFamily: "'Noto Sans JP', sans-serif",
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}
+                  >
                     {col.description}
                   </p>
-
-                  <div className="flex items-center justify-between">
-                    <span className="font-nunito text-xs text-[#A89F98]">{col.publishedAt}</span>
-                    <span className="text-xs text-[#5BBDB3] font-medium">続きを読む →</span>
+                  <div className="flex items-center gap-2.5">
+                    <span
+                      className="text-[11px] text-[#B8AFA0]"
+                      style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+                    >
+                      {col.publishedAt}
+                    </span>
+                    <span
+                      className="text-[11px] text-[#B8AFA0]"
+                      style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+                    >
+                      {col.readingTime}
+                    </span>
                   </div>
                 </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      <Footer />
+                {/* サムネエリア（右） */}
+                <div
+                  className="shrink-0 rounded-lg w-[80px] h-[54px] lg:w-[120px] lg:h-[80px]"
+                  style={{
+                    backgroundColor: col.thumbnailColor ?? '#E8E0C8',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                  }}
+                />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

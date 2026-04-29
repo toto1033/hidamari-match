@@ -9,6 +9,9 @@
   .font-nunito {
     font-family: 'Nunito', sans-serif;
   }
+  .font-mincho {
+    font-family: var(--font-shippori-mincho), 'Shippori Mincho', serif;
+  }
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;

@@ -17,7 +17,10 @@
       "Bash(node *)",
       "PowerShell(taskkill *)",
       "Bash(taskkill /PID 16104 /F)",
-      "PowerShell(Stop-Process *)"
+      "PowerShell(Stop-Process *)",
+      "Bash(npx tsc *)",
+      "Bash(git restore *)",
+      "Bash(curl -s http://localhost:3000/column -o /dev/null -w \"%{http_code}\")"
     ]
   }
 }
